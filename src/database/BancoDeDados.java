@@ -8,7 +8,7 @@ public class BancoDeDados {
 
     public static void criarTabelas() {
         String[] sqlStatements = {
-                // Tabela Funcionario
+               
                 "CREATE TABLE IF NOT EXISTS Funcionario (" +
                         "    id_funcionario INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    login TEXT NOT NULL UNIQUE," +
@@ -18,7 +18,7 @@ public class BancoDeDados {
                         "    senha TEXT NOT NULL" +
                         ");",
 
-                // Tabela Usuario (Cliente)
+                
                 "CREATE TABLE IF NOT EXISTS Usuario (" +
                         "    id_usuario INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    nome TEXT NOT NULL," +
@@ -29,7 +29,7 @@ public class BancoDeDados {
                         "    senha TEXT NOT NULL" +
                         ");",
 
-                // Tabela Fornecedor
+               
                 "CREATE TABLE IF NOT EXISTS Fornecedor (" +
                         "    id_fornecedor INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    nome TEXT NOT NULL," +
@@ -39,21 +39,21 @@ public class BancoDeDados {
                         "    telefone TEXT" +
                         ");",
 
-                // Tabela Categoria
+                
                 "CREATE TABLE IF NOT EXISTS Categoria (" +
                         "    id_categoria INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    nome TEXT NOT NULL UNIQUE," +
                         "    descricao TEXT" +
                         ");",
 
-                // Tabela Plataforma
+               
                 "CREATE TABLE IF NOT EXISTS Plataforma (" +
                         "    id_plataforma INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    nome TEXT NOT NULL UNIQUE," +
                         "    fabricante TEXT" +
                         ");",
 
-                // Tabela Console
+               
                 "CREATE TABLE IF NOT EXISTS Console (" +
                         "    id_console INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    estoque INTEGER NOT NULL DEFAULT 0," +
@@ -63,7 +63,7 @@ public class BancoDeDados {
                         "    FOREIGN KEY(id_fornecedor) REFERENCES Fornecedor(id_fornecedor)" +
                         ");",
 
-                // Tabela Jogo
+                
                 "CREATE TABLE IF NOT EXISTS Jogo (" +
                         "    id_jogo INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    nome TEXT NOT NULL," +
@@ -73,7 +73,7 @@ public class BancoDeDados {
                         "    FOREIGN KEY(id_categoria) REFERENCES Categoria(id_categoria)" +
                         ");",
 
-                // Tabela Associativa Jogo_Plataforma
+               
                 "CREATE TABLE IF NOT EXISTS Jogo_Plataforma (" +
                         "    id_jogo INTEGER," +
                         "    id_plataforma INTEGER," +
@@ -82,7 +82,7 @@ public class BancoDeDados {
                         "    FOREIGN KEY(id_plataforma) REFERENCES Plataforma(id_plataforma) ON DELETE CASCADE" +
                         ");",
 
-                // Tabela Venda
+                
                 "CREATE TABLE IF NOT EXISTS Venda (" +
                         "    id_venda INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    data_venda TEXT NOT NULL," +
@@ -94,7 +94,7 @@ public class BancoDeDados {
                         "    FOREIGN KEY(id_usuario) REFERENCES Usuario(id_usuario)" +
                         ");",
 
-                // Tabela ItemCompra (Itens da Venda)
+                
                 "CREATE TABLE IF NOT EXISTS ItemCompra (" +
                         "    id_item_compra INTEGER PRIMARY KEY AUTOINCREMENT," +
                         "    quantidade INTEGER NOT NULL," +
@@ -108,7 +108,7 @@ public class BancoDeDados {
                         "    CHECK (id_jogo IS NOT NULL OR id_console IS NOT NULL)" +
                         ");",
 
-                // Inserir funcionário admin padrão se não existir
+                
                 "INSERT OR IGNORE INTO Funcionario (id_funcionario, login, nome, senha) VALUES (1, 'admin', 'Administrador', 'admin');"
         };
 
@@ -120,9 +120,9 @@ public class BancoDeDados {
             System.out.println("Tabelas criadas com sucesso (ou já existentes).");
         } catch (SQLException e) {
             System.err.println("Erro ao criar as tabelas: " + e.getMessage());
-            // Considerar lançar uma exceção em um aplicativo real para parar a execução
-            // throw new RuntimeException(e);
+            
         }
     }
 }
+
 
