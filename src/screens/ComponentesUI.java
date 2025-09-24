@@ -14,25 +14,21 @@ public class ComponentesUI {
     private static final Font FONTE_BOTAO = new Font("Segoe UI", Font.BOLD, 14);
     private static Image iconeLogo = null;
 
-    /**
-     * Cria um painel padronizado com a logo da empresa.
-     * @return JPanel com a logo.
-     */
     public static JPanel criarPainelLogo() {
         JPanel painelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
         painelLogo.setBackground(Color.WHITE);
         try {
-            // Tenta carregar a imagem local a partir do classpath (src/image.png)
+           
             URL url = ComponentesUI.class.getResource("/image.png");
             if (url == null) throw new IOException("Arquivo de imagem não encontrado no classpath: /image.png");
 
             ImageIcon logoIcon = new ImageIcon(url);
-            // Redimensiona a imagem para um tamanho padrão
+            
             Image imagem = logoIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
             JLabel lblLogo = new JLabel(new ImageIcon(imagem));
             painelLogo.add(lblLogo);
         } catch (Exception e) {
-            // Caso a imagem não carregue, exibe um texto
+            
             JLabel lblTextoLogo = new JLabel("The Loot Box");
             lblTextoLogo.setFont(new Font("Arial", Font.BOLD, 24));
             painelLogo.add(lblTextoLogo);
@@ -42,11 +38,7 @@ public class ComponentesUI {
         return painelLogo;
     }
 
-    /**
-     * Carrega a imagem do ícone da aplicação a partir do caminho local.
-     * Usa um cache para não precisar carregar a imagem toda vez.
-     * @return A imagem do ícone ou null se ocorrer um erro.
-     */
+   
     public static Image getIconeLogo() {
         if (iconeLogo == null) {
             try {
@@ -60,11 +52,6 @@ public class ComponentesUI {
         return iconeLogo;
     }
 
-    /**
-     * Aplica um estilo padronizado a um JButton.
-     * @param button O botão a ser estilizado.
-     * @param backgroundColor A cor de fundo do botão.
-     */
     public static void styleButton(JButton button, Color backgroundColor) {
         button.setBackground(backgroundColor);
         button.setForeground(COR_TEXTO_BOTAO);
@@ -73,4 +60,5 @@ public class ComponentesUI {
         button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
+
 }
