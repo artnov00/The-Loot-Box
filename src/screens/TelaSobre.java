@@ -9,8 +9,6 @@ public class TelaSobre extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        add(ComponentesUI.criarPainelLogo(), BorderLayout.NORTH);
-
         JTextArea areaTexto = new JTextArea();
         areaTexto.setEditable(false);
         areaTexto.setLineWrap(true);

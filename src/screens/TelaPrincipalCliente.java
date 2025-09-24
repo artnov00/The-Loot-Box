@@ -49,15 +49,21 @@ public class TelaPrincipalCliente extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
-        // Painel Superior
+        // Adiciona o ícone da janela
+        Image icone = ComponentesUI.getIconeLogo();
+        if (icone != null) {
+            setIconImage(icone);
+        }
+
+        // Painel Superior com Logo e Botão Sair
         JPanel painelTopo = new JPanel(new BorderLayout());
-        painelTopo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        JLabel lblTitulo = new JLabel("Faça sua Compra", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        painelTopo.add(ComponentesUI.criarPainelLogo(), BorderLayout.CENTER);
         JButton btnSair = new JButton("Sair");
-        painelTopo.add(lblTitulo, BorderLayout.CENTER);
-        painelTopo.add(btnSair, BorderLayout.EAST);
+        JPanel painelSair = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        painelSair.add(btnSair);
+        painelTopo.add(painelSair, BorderLayout.EAST);
         add(painelTopo, BorderLayout.NORTH);
+
 
         // Painel de Compra (Esquerda)
         JPanel painelCompra = new JPanel(new GridBagLayout());

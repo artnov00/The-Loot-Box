@@ -1,7 +1,10 @@
 package screens;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.net.URL;
 
 public class ComponentesUI {
 
@@ -9,6 +12,7 @@ public class ComponentesUI {
     private static final Color COR_BOTAO_PRIMARIO = new Color(0, 120, 215);
     private static final Color COR_TEXTO_BOTAO = Color.WHITE;
     private static final Font FONTE_BOTAO = new Font("Segoe UI", Font.BOLD, 14);
+    private static Image iconeLogo = null;
 
     /**
      * Cria um painel padronizado com a logo da empresa.
@@ -16,23 +20,44 @@ public class ComponentesUI {
      */
     public static JPanel criarPainelLogo() {
         JPanel painelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        painelLogo.setBackground(COR_FUNDO_PAINEL);
+        painelLogo.setBackground(Color.WHITE);
+        try {
+            // Tenta carregar a imagem local a partir do classpath (src/image.png)
+            URL url = ComponentesUI.class.getResource("/image.png");
+            if (url == null) throw new IOException("Arquivo de imagem não encontrado no classpath: /image.png");
 
-        ImageIcon logoIcon = new ImageIcon("src/imagem.png");
-        JLabel lblLogo = new JLabel();
-
-        if (logoIcon.getImageLoadStatus() == MediaTracker.COMPLETE) {
-            Image image = logoIcon.getImage().getScaledInstance(200, 67, Image.SCALE_SMOOTH);
-            lblLogo.setIcon(new ImageIcon(image));
-        } else {
-            lblLogo.setText("The Loot Box");
-            lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 24));
-            lblLogo.setForeground(Color.DARK_GRAY);
+            ImageIcon logoIcon = new ImageIcon(url);
+            // Redimensiona a imagem para um tamanho padrão
+            Image imagem = logoIcon.getImage().getScaledInstance(200, 60, Image.SCALE_SMOOTH);
+            JLabel lblLogo = new JLabel(new ImageIcon(imagem));
+            painelLogo.add(lblLogo);
+        } catch (Exception e) {
+            // Caso a imagem não carregue, exibe um texto
+            JLabel lblTextoLogo = new JLabel("The Loot Box");
+            lblTextoLogo.setFont(new Font("Arial", Font.BOLD, 24));
+            painelLogo.add(lblTextoLogo);
+            System.err.println("Erro ao carregar a imagem da logo: " + e.getMessage());
         }
-
-        painelLogo.add(lblLogo);
-        painelLogo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelLogo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         return painelLogo;
+    }
+
+    /**
+     * Carrega a imagem do ícone da aplicação a partir do caminho local.
+     * Usa um cache para não precisar carregar a imagem toda vez.
+     * @return A imagem do ícone ou null se ocorrer um erro.
+     */
+    public static Image getIconeLogo() {
+        if (iconeLogo == null) {
+            try {
+                URL url = ComponentesUI.class.getResource("/image.png");
+                if (url == null) throw new IOException("Arquivo de imagem não encontrado no classpath: /image.png");
+                iconeLogo = new ImageIcon(url).getImage();
+            } catch (Exception e) {
+                System.err.println("Erro ao carregar o ícone da logo: " + e.getMessage());
+            }
+        }
+        return iconeLogo;
     }
 
     /**
@@ -49,4 +74,3 @@ public class ComponentesUI {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 }
-
