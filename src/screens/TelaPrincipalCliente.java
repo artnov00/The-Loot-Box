@@ -24,7 +24,7 @@ public class TelaPrincipalCliente extends JFrame {
         final int id;
         final String nome;
         final BigDecimal preco;
-        final String tipo; // "JOGO" ou "CONSOLE"
+        final String tipo; 
         int estoque;
 
         ProdutoItem(int id, String nome, BigDecimal preco, String tipo, int estoque) {
@@ -49,13 +49,13 @@ public class TelaPrincipalCliente extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
 
-        // Adiciona o ícone da janela
+        
         Image icone = ComponentesUI.getIconeLogo();
         if (icone != null) {
             setIconImage(icone);
         }
 
-        // Painel Superior com Logo e Botão Sair
+        
         JPanel painelTopo = new JPanel(new BorderLayout());
         painelTopo.add(ComponentesUI.criarPainelLogo(), BorderLayout.CENTER);
         JButton btnSair = new JButton("Sair");
@@ -65,7 +65,7 @@ public class TelaPrincipalCliente extends JFrame {
         add(painelTopo, BorderLayout.NORTH);
 
 
-        // Painel de Compra (Esquerda)
+        
         JPanel painelCompra = new JPanel(new GridBagLayout());
         painelCompra.setBorder(BorderFactory.createTitledBorder("Selecione os Produtos"));
         GridBagConstraints gbc = new GridBagConstraints();
@@ -82,7 +82,7 @@ public class TelaPrincipalCliente extends JFrame {
         gbc.gridx = 1; gbc.gridy = 1; painelCompra.add(spinnerQuantidade, gbc);
         gbc.gridy = 2; gbc.gridwidth = 2; painelCompra.add(btnAdicionar, gbc);
 
-        // Painel do Carrinho (Direita)
+        
         JPanel painelCarrinho = new JPanel(new BorderLayout(10, 10));
         painelCarrinho.setBorder(BorderFactory.createTitledBorder("Carrinho de Compras"));
 
@@ -94,7 +94,7 @@ public class TelaPrincipalCliente extends JFrame {
         tabelaCarrinho = new JTable(modeloTabelaCarrinho);
         painelCarrinho.add(new JScrollPane(tabelaCarrinho), BorderLayout.CENTER);
 
-        // Painel de Finalização (Abaixo do Carrinho)
+        
         JPanel painelFinalizar = new JPanel(new BorderLayout());
         lblTotal = new JLabel("Total: R$ 0,00");
         lblTotal.setFont(new Font("Arial", Font.BOLD, 16));
@@ -110,7 +110,7 @@ public class TelaPrincipalCliente extends JFrame {
         painelFinalizar.add(painelPagamento, BorderLayout.EAST);
         painelCarrinho.add(painelFinalizar, BorderLayout.SOUTH);
 
-        // Split Pane para dividir a tela
+        
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, painelCompra, painelCarrinho);
         splitPane.setDividerLocation(350);
         add(splitPane, BorderLayout.CENTER);
@@ -128,7 +128,7 @@ public class TelaPrincipalCliente extends JFrame {
 
     private void carregarProdutos() {
         List<ProdutoItem> produtos = new ArrayList<>();
-        // Carregar Jogos
+        
         String sqlJogos = "SELECT id_jogo, nome, preco, estoque FROM Jogo WHERE estoque > 0";
         try (Connection conn = ConexaoSQLite.abrirConexao(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlJogos)) {
             while (rs.next()) {
@@ -137,7 +137,7 @@ public class TelaPrincipalCliente extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar jogos: " + e.getMessage());
         }
-        // Carregar Consoles
+        
         String sqlConsoles = "SELECT id_console, modelo, preco, estoque FROM Console WHERE estoque > 0";
         try (Connection conn = ConexaoSQLite.abrirConexao(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlConsoles)) {
             while (rs.next()) {
@@ -168,7 +168,7 @@ public class TelaPrincipalCliente extends JFrame {
         BigDecimal subtotal = produtoSelecionado.preco.multiply(new BigDecimal(quantidade));
 
         Vector<Object> row = new Vector<>();
-        row.add(produtoSelecionado); // Adiciona o objeto inteiro para fácil recuperação
+        row.add(produtoSelecionado); 
         row.add(quantidade);
         row.add(produtoSelecionado.preco);
         row.add(subtotal);
@@ -194,9 +194,9 @@ public class TelaPrincipalCliente extends JFrame {
         Connection conn = null;
         try {
             conn = ConexaoSQLite.abrirConexao();
-            conn.setAutoCommit(false); // Iniciar transação
+            conn.setAutoCommit(false); 
 
-            // 1. Inserir a Venda
+            
             String sqlVenda = "INSERT INTO Venda(data_venda, forma_pagamento, valor_total, id_funcionario, id_usuario) VALUES (?, ?, ?, ?, ?)";
             int idVenda;
             try (PreparedStatement pstmtVenda = conn.prepareStatement(sqlVenda, Statement.RETURN_GENERATED_KEYS)) {
@@ -204,7 +204,7 @@ public class TelaPrincipalCliente extends JFrame {
                 pstmtVenda.setString(1, LocalDate.now().toString());
                 pstmtVenda.setString(2, formaPagamento);
                 pstmtVenda.setBigDecimal(3, total);
-                pstmtVenda.setInt(4, 1); // **CORREÇÃO: Associa ao funcionário admin padrão**
+                pstmtVenda.setInt(4, 1); 
                 pstmtVenda.setInt(5, this.idCliente);
                 pstmtVenda.executeUpdate();
 
@@ -212,7 +212,7 @@ public class TelaPrincipalCliente extends JFrame {
                 idVenda = rs.getInt(1);
             }
 
-            // 2. Inserir Itens da Compra e Atualizar Estoque
+            
             String sqlItem = "INSERT INTO ItemCompra(quantidade, preco_unitario, id_venda, id_jogo, id_console) VALUES (?, ?, ?, ?, ?)";
             String sqlUpdateEstoqueJogo = "UPDATE Jogo SET estoque = estoque - ? WHERE id_jogo = ?";
             String sqlUpdateEstoqueConsole = "UPDATE Console SET estoque = estoque - ? WHERE id_console = ?";
@@ -235,7 +235,7 @@ public class TelaPrincipalCliente extends JFrame {
                         pstmtUpdateJogo.setInt(1, quantidade);
                         pstmtUpdateJogo.setInt(2, produto.id);
                         pstmtUpdateJogo.executeUpdate();
-                    } else { // CONSOLE
+                    } else { 
                         pstmtItem.setNull(4, Types.INTEGER);
                         pstmtItem.setInt(5, produto.id);
                         pstmtUpdateConsole.setInt(1, quantidade);
@@ -264,4 +264,5 @@ public class TelaPrincipalCliente extends JFrame {
         }
     }
 }
+
 
