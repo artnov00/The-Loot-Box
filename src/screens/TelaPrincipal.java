@@ -12,13 +12,11 @@ public class TelaPrincipal extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Adiciona o ícone da janela
         Image icone = ComponentesUI.getIconeLogo();
         if (icone != null) {
             setIconImage(icone);
         }
 
-        // Adiciona a logo no topo
         add(ComponentesUI.criarPainelLogo(), BorderLayout.NORTH);
 
         JTabbedPane abas = new JTabbedPane();
@@ -35,4 +33,5 @@ public class TelaPrincipal extends JFrame {
 
         add(abas, BorderLayout.CENTER);
     }
+
 }
