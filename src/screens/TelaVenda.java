@@ -18,7 +18,7 @@ public class TelaVenda extends JPanel {
     private static final String TIPO_JOGO = "Jogo";
     private static final String TIPO_CONSOLE = "Console";
 
-    // Classes internas para representar os itens nos ComboBoxes e na tabela
+    
     private static class ProdutoVenda {
         int id; String nome; BigDecimal preco; int estoque; String tipo;
         ProdutoVenda(int id, String nome, BigDecimal preco, int estoque, String tipo) {
@@ -37,7 +37,7 @@ public class TelaVenda extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Painel Superior: Seleção de Produtos e Clientes
+       
         JPanel painelSuperior = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -62,7 +62,7 @@ public class TelaVenda extends JPanel {
 
         add(painelSuperior, BorderLayout.NORTH);
 
-        // Painel Central: Tabela do Carrinho
+        
         String[] colunas = {"ID Produto", "Tipo", "Nome", "Qtd", "Preço Unit.", "Subtotal"};
         modeloCarrinho = new DefaultTableModel(colunas, 0) {
             @Override public boolean isCellEditable(int row, int column) { return false; }
@@ -70,7 +70,7 @@ public class TelaVenda extends JPanel {
         JTable tabelaCarrinho = new JTable(modeloCarrinho);
         add(new JScrollPane(tabelaCarrinho), BorderLayout.CENTER);
 
-        // Painel Inferior: Total e Finalizar Venda
+        
         JPanel painelInferior = new JPanel(new BorderLayout());
         lblTotal = new JLabel("Total: R$ 0,00");
         lblTotal.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -89,9 +89,9 @@ public class TelaVenda extends JPanel {
         cbProdutos.removeAllItems();
         cbClientes.removeAllItems();
 
-        // Carregar Produtos (Jogos e Consoles)
+       
         try (Connection conn = ConexaoSQLite.abrirConexao()) {
-            // Carregar Jogos
+           
             String sqlJogos = "SELECT id_jogo, nome, preco, estoque FROM Jogo WHERE estoque > 0";
             try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlJogos)) {
                 while (rs.next()) {
@@ -101,7 +101,7 @@ public class TelaVenda extends JPanel {
                 }
             }
 
-            // Carregar Consoles
+            
             String sqlConsoles = "SELECT id_console, modelo, preco, estoque FROM Console WHERE estoque > 0";
             try (Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlConsoles)) {
                 while (rs.next()) {
@@ -125,7 +125,7 @@ public class TelaVenda extends JPanel {
             e.printStackTrace();
         }
 
-        // Carregar Clientes
+        
         try (Connection conn = ConexaoSQLite.abrirConexao(); Statement stmt = conn.createStatement()) {
             String sql = "SELECT id_usuario, nome, cpf FROM Usuario ORDER BY nome";
             try (ResultSet rs = stmt.executeQuery(sql)) {
@@ -176,17 +176,17 @@ public class TelaVenda extends JPanel {
             return;
         }
 
-        // Assume um funcionário fixo (ID 1 - admin) para simplificar
+       
         int idFuncionario = 1;
-        String formaPagamento = "Cartão"; // Simplificado
+        String formaPagamento = "Cartão"; 
         BigDecimal valorTotal = new BigDecimal(lblTotal.getText().replace("Total: R$ ", "").replace(",", "."));
 
         Connection conn = null;
         try {
             conn = ConexaoSQLite.abrirConexao();
-            conn.setAutoCommit(false); // Inicia transação
+            conn.setAutoCommit(false); 
 
-            // 1. Inserir na tabela Venda
+            
             String sqlVenda = "INSERT INTO Venda(forma_pagamento, valor_total, id_funcionario, id_usuario) VALUES(?,?,?,?)";
             int idVenda;
             try (PreparedStatement pstmtVenda = conn.prepareStatement(sqlVenda, Statement.RETURN_GENERATED_KEYS)) {
@@ -200,7 +200,7 @@ public class TelaVenda extends JPanel {
                 }
             }
 
-            // 2. Inserir na tabela ItemCompra e atualizar estoque
+           
             String sqlItem = "INSERT INTO ItemCompra(quantidade, preco_unitario, id_venda, id_jogo, id_console) VALUES(?,?,?,?,?)";
             String sqlUpdateEstoqueJogo = "UPDATE Jogo SET estoque = estoque - ? WHERE id_jogo = ?";
             String sqlUpdateEstoqueConsole = "UPDATE Console SET estoque = estoque - ? WHERE id_console = ?";
@@ -225,7 +225,7 @@ public class TelaVenda extends JPanel {
                         pstmtJogo.setInt(1, qtd);
                         pstmtJogo.setInt(2, idProduto);
                         pstmtJogo.addBatch();
-                    } else { // TIPO_CONSOLE
+                    } else { 
                         pstmtItem.setNull(4, Types.INTEGER);
                         pstmtItem.setInt(5, idProduto);
                         pstmtConsole.setInt(1, qtd);
@@ -238,7 +238,7 @@ public class TelaVenda extends JPanel {
                 pstmtConsole.executeBatch();
             }
 
-            conn.commit(); // Finaliza a transação com sucesso
+            conn.commit(); 
 
             JOptionPane.showMessageDialog(this, "Venda finalizada com sucesso!");
             modeloCarrinho.setRowCount(0);
@@ -253,4 +253,5 @@ public class TelaVenda extends JPanel {
         }
     }
 }
+
 
