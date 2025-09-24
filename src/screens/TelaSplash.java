@@ -23,7 +23,7 @@ public class TelaSplash extends JWindow {
 
         setContentPane(content);
 
-        // Timer para fechar o splash e abrir a tela de login
+        
         Timer timer = new Timer(3000, e -> {
             dispose();
             new TelaLogin().setVisible(true);
@@ -32,4 +32,5 @@ public class TelaSplash extends JWindow {
         timer.start();
     }
 }
+
 
